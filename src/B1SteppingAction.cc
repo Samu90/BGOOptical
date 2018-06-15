@@ -19,9 +19,9 @@
 B1SteppingAction::B1SteppingAction(B1EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume3(0),
-  fScoringVolume2(0),
-  fScoringVolume1(0)
+  //fScoringVolume1(0),
+  //fScoringVolume2(0),
+  fScoringVolume3(0)
 {
   fScintillationCounter = 0;
   fCerenkovCounter      = 0;
@@ -38,13 +38,13 @@ B1SteppingAction::~B1SteppingAction()
 
 void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  if (!fScoringVolume1 && !fScoringVolume2 && !fScoringVolume3) { 
+  if (!fScoringVolume3) { 
     const B1DetectorConstruction* detectorConstruction
       = static_cast<const B1DetectorConstruction*>
       (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
     fScoringVolume3 = detectorConstruction->GetScoringVolume3();
-    fScoringVolume2 = detectorConstruction->GetScoringVolume2();
-    fScoringVolume1 = detectorConstruction->GetScoringVolume1();
+    //fScoringVolume2 = detectorConstruction->GetScoringVolume2();
+    //fScoringVolume1 = detectorConstruction->GetScoringVolume1();
   }
 
   // get volume of the current step
@@ -53,7 +53,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
     ->GetVolume()->GetLogicalVolume();
   
   // check if we are in scoring volume
-  if (volume != fScoringVolume1 && volume != fScoringVolume2 && volume != fScoringVolume3) return;
+  if (volume != fScoringVolume3) return;
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
   
@@ -91,16 +91,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
         if (secondaries->at(i)->GetParentID()>0) {
 	  if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
 	     == G4OpticalPhoton::OpticalPhotonDefinition()){
-	    
-	    G4LogicalVolume* OptVolume=step->GetSecondaryInCurrentStep()->at(i)->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
-	    int ParticleID = secondaries->at(i)->GetParentID;
-	    
-	    if(OptVolume==fScoringVolume1 ){
-	      if(step->GetSecondaryInCurrentStep()->at(i)->GetCreatorProcess()->GetProcessName() == "Scintillation"){
-		
-	      }//chiudo if step
-	    }//chiudo controllo volume
-	    
+	    	    
 	    //G4cout<<"fotone"<<G4endl;
 	    //if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
 	  }
@@ -110,7 +101,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
 
     
-
+    // G4cout<<CD1Che<< "  pippo  "<<CD1Sci<< "   "<<CD1Che<<G4endl;
 
 
 

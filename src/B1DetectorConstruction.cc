@@ -23,6 +23,8 @@
 
 B1DetectorConstruction::B1DetectorConstruction()
 : G4VUserDetectorConstruction(),
+  fScoringVolume1(0),
+  fScoringVolume2(0),
   fScoringVolume3(0)
 { }
 
