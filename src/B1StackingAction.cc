@@ -48,7 +48,7 @@ if (!fScoringVolume1 && !fScoringVolume2) {
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
 	fCerenkovCounter++;}
 
-      G4LogicalVolume* OptVolume=aTrack->GetVolume();
+      G4LogicalVolume* OptVolume=aTrack->GetVolume()->GetLogicalVolume();
       //int ParticleID = aTrack->GetParentID();
       G4cout<< OptVolume <<G4endl;
       if(OptVolume==fScoringVolume1 ){
