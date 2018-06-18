@@ -18,13 +18,10 @@ class OpNoviceStackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
-    G4LogicalVolume* fScoringVolume1;
-  G4LogicalVolume* fScoringVolume2;
+ 
   G4int fScintillationCounter;
     G4int fCerenkovCounter;
-    G4int CD1Sci;
-  G4int CD1Che;
-  G4int CD2Che;
+ 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
