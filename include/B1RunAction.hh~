@@ -24,26 +24,30 @@ class HistoManager;
 class B1RunAction : public G4UserRunAction
 {
   public:
-  B1RunAction(HistoManager*);
+    B1RunAction(HistoManager*);
     virtual ~B1RunAction();
 
     // virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-  void FillPerEvent(G4double );
+    void FillPerEvent(G4double , G4double );
 
+  void AddEdep1 (G4double edep);
+  void AddEdep2 (G4double edep);
   void AddEdep3 (G4double edep);
-
-  MyCounter* GetCounter() const { return Conteggi;};
+  MyCounter* GetConteggi() const { return Conteggi;};
 
   private:
     HistoManager* fHistoManager;
 
     
-  
+    G4Accumulable<G4double> fEdep1;
+    G4Accumulable<G4double> fEdep2;
     G4Accumulable<G4double> fEdep3;
-  
+  G4Accumulable<G4double> f2Edep1;
+    G4Accumulable<G4double> f2Edep2;
+
   
     MyCounter* Conteggi;
 };

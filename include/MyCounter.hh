@@ -5,30 +5,22 @@ class MyCounter{
 public:
   MyCounter();
   
-  inline void IncreaseUp() {countU_+=1;}
-  void IncreaseDown() {countD_+=1;}
-  void IncreaseCoinc() {coincidence_+=1;}
-  void IncreaseCher() {countC_+=1;}
-  void IncreaseTri() {triple_+=1;}
+  void IncreaseS1(){countSci1++;}
+  void IncreaseC1(){countChe1++;}
+  void IncreaseS2(){countSci2++;}
+  void IncreaseC2(){countChe2++;}
 
-  inline void IncreaseTotCount() {totCount_++;};
-
-  inline int GetCountU() const {return countU_;}
-  int GetCountD() {return countD_;}
-  int GetCoincidence() {return coincidence_;}
-  int GetCountC() {return countC_;}
-  int GetTriple() {return triple_;}
-  double GetEff();
-  double GetNoGoodEvents();
+  int GetS1(){return countSci1;}
+  int GetC1(){return countChe1;}
+  int GetS2(){return countSci2;}
+  int GetC2(){return countChe2;}
   
     
 private:
-  int countU_;
-  int countD_;
-  int coincidence_;
-  int countC_;
-  int totCount_;
-  int triple_;
+  int countSci1;
+  int countChe1;
+  int countSci2;
+  int countChe2;
 };
 
 #endif

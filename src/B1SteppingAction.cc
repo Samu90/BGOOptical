@@ -14,14 +14,13 @@
 #include "G4ParticleTypes.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
+#include "B1RunAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1SteppingAction::B1SteppingAction(B1EventAction* eventAction)
+B1SteppingAction::B1SteppingAction(B1EventAction* eventAction,B1RunAction* runAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  CD1Sci(0),
-  CD1Che(0),
-  CD2Che(0),
+  fRunAction(runAction),
   fScoringVolume1(0),
   fScoringVolume2(0),
   fScoringVolume3(0)
@@ -57,7 +56,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
     ->GetVolume()->GetLogicalVolume();
   
   // check if we are in scoring volume
-  //if (volume != fScoringVolume3 && volume != fScoringVolume2 && volume != fScoringVolume1) return;
+  if (volume != fScoringVolume3 && volume != fScoringVolume2 && volume != fScoringVolume1) return;
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
   
@@ -69,35 +68,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
   
   //int ParticleID = aTrack->GetParentID();
-  if (step->GetSecondaryInCurrentStep()->size()>0) {
-    for(unsigned int i=0; i<step->GetSecondaryInCurrentStep()->size(); ++i) {
-      if(step->GetSecondaryInCurrentStep()->at(i)->GetDynamicParticle()->GetParticleDefinition()
-	 == G4OpticalPhoton::OpticalPhotonDefinition()){
-
-	if(volume==fScoringVolume1){
-	  G4cout<<"è entrata nel volume1"<<G4endl;
-
-	  if(step->GetSecondaryInCurrentStep()->at(i)->GetCreatorProcess()->GetProcessName() == "Scintillation"){
-	    CD1Sci++;
-	    G4double EnergyOpt=step->GetTrack()->GetTotalEnergy();
-	  }//chiudo if step
-
-	  if(step->GetSecondaryInCurrentStep()->at(i)->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
-	    CD1Che++;
-	    G4double EnergyOpt=step->GetTrack()->GetTotalEnergy();
-	  }//chiudo if step      
-	}//chiudo controllo volume
-	
-	if(volume==fScoringVolume2){
-	  if(step->GetSecondaryInCurrentStep()->at(i)->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
-	    CD2Che++;
-	    G4double EnergyOpt=step->GetTrack()->GetTotalEnergy();
-	    //G4cout<< "cherenkov sul 2"<<G4endl;
-	  } 
-	}
-      }
-    }//chiudo for unsigned int
-  }// chiudo for secondaries
+  
   
   
   G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
@@ -115,34 +86,48 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   
   
   
-  if (ParticleName == "opticalphoton") return; // if the particle is an optical photon return, else
-  //if the particle is not an optical photon (muon for example) generate secondaries particles
-  
-  const std::vector<const G4Track*>* secondaries =
-    step->GetSecondaryInCurrentStep();
-
-  
-  if (secondaries->size()>0) {
-    for(unsigned int i=0; i<secondaries->size(); ++i) {
-      if (secondaries->at(i)->GetParentID()>0) {
-	if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
-	   == G4OpticalPhoton::OpticalPhotonDefinition()){
-	  
-	  //G4cout<<"fotone"<<G4endl;
-	  //if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
+  if (ParticleName != "opticalphoton"){ // if the particle is an optical photon return, else
+    //if the particle is not an optical photon (muon for example) generate secondaries particles
+    
+     const std::vector<const G4Track*>* secondaries=step->GetSecondaryInCurrentStep();
+    
+    
+    if (secondaries->size()>0) {
+      for(unsigned int i=0; i<secondaries->size(); ++i) {
+	if (secondaries->at(i)->GetParentID()>0) {
+	  if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
+	     == G4OpticalPhoton::OpticalPhotonDefinition()){
+	    
+	    //G4cout<<"fotone"<<G4endl;
+	    //if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
+	  }
 	}
       }
+    }//chiude l'if secondaries->Size
+  }//if optical
+
+  if(ParticleName == "opticalphoton"){
+
+    if(volume == fScoringVolume1){
+      G4cout << "fotone sull'1" << G4endl;
+      fRunAction->GetCounter()->IncreaseS1();
+      track->SetTrackStatus(fStopAndKill);
     }
-  }//chiude l'if secondaries->Size
-  
-  G4cout << "Number of photon in D1->   Che:" << CD1Che << "  Sci:"<< CD1Sci << G4endl;
-  G4cout << "Number of photon in D2->   Che:" << CD2Che << G4endl;
-  
-  // G4cout<<CD1Che<< "  pippo  "<<CD1Sci<< "   "<<CD1Che<<G4endl;
-  
-  
+
+    if(volume == fScoringVolume2){
+      G4cout << "fotone sull'1" << G4endl;
+      fRunAction->GetCounter()->IncreaseS2();
+      track->SetTrackStatus(fStopAndKill);
+    }
     
-    
+  }//if optical photon
+
+
+
+
+
+  
+     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
