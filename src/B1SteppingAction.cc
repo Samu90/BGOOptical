@@ -54,12 +54,18 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
     ->GetVolume()->GetLogicalVolume();
+
+  // get volume of the current step
+  G4LogicalVolume* volume2 
+    = step->GetPostStepPoint()->GetTouchableHandle()
+    ->GetVolume()->GetLogicalVolume();
+
   
   // check if we are in scoring volume
-  if (volume != fScoringVolume3 && volume != fScoringVolume2 && volume != fScoringVolume1) return;
+  //  if (volume != fScoringVolume3 && volume != fScoringVolume2 && volume != fScoringVolume1) return;
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
-  
+
   
   
   if(volume==fScoringVolume3){
@@ -83,6 +89,17 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   
   G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
   
+  if (volume == fScoringVolume3 &&  ParticleName=="opticalphoton")
+    {
+      if(volume2= fScoringVolume1)
+	{
+	  fEventAction->IncrementPhotonInDetector(0);
+	}
+      else if(volume2= fScoringVolume2)      
+	{
+	  fEventAction->IncrementPhotonInDetector(1);
+	}
+    }
   
   
   
@@ -110,13 +127,15 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
     if(volume == fScoringVolume1){
       G4cout << "fotone sull'1" << G4endl;
-      fRunAction->GetCounter()->IncreaseS1();
+      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation")fRunAction->GetCounter()->IncreaseS1();
+      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov")fRunAction->GetCounter()->IncreaseC1();
       track->SetTrackStatus(fStopAndKill);
     }
 
     if(volume == fScoringVolume2){
-      G4cout << "fotone sull'1" << G4endl;
-      fRunAction->GetCounter()->IncreaseS2();
+      G4cout << "fotone sul 2" << G4endl;
+      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation")fRunAction->GetCounter()->IncreaseS2();
+      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov")fRunAction->GetCounter()->IncreaseC2();
       track->SetTrackStatus(fStopAndKill);
     }
     

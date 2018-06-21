@@ -18,14 +18,22 @@
 
 B1RunAction::B1RunAction(HistoManager* histo)
   : G4UserRunAction(),
-    fHistoManager(histo),
-    fEdep3(0)
+  fHistoManager(histo),
+  fEdep1(0.),
+  fEdep2(0.),
+    fEdep3(0),
+  f2Edep1(0.),
+  f2Edep2(0.)
 { 
     
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+    accumulableManager->RegisterAccumulable(fEdep1);
+    accumulableManager->RegisterAccumulable(fEdep2);
     accumulableManager->RegisterAccumulable(fEdep3);
 
+    accumulableManager->RegisterAccumulable(f2Edep1);
+    accumulableManager->RegisterAccumulable(f2Edep2);
   Conteggi = new MyCounter();
     
 }
@@ -43,22 +51,23 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
 { 
   // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  
+
   // reset accumulables to their initial values
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
-  
-  //histograms
-  fHistoManager -> Book();
+
+    //histograms
+    fHistoManager -> Book();
 }
 
-void B1RunAction::FillPerEvent(G4double Edep3)
+void B1RunAction::FillPerEvent(G4double Edep1, G4double Edep2)
 {
-  //accumulate statistic
-  //
-  fEdep3 += Edep3;    //fSum2EGap += EGap*EGap;
-  
-  
+    //accumulate statistic
+    //
+    fEdep1 += Edep1;    //fSum2EAbs += EAbs*EAbs;
+    fEdep2 += Edep2;    //fSum2EGap += EGap*EGap;
+    
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,14 +75,14 @@ void B1RunAction::FillPerEvent(G4double Edep3)
 void B1RunAction::EndOfRunAction(const G4Run*)
 {
   //G4int NbOfEvents = run->GetNumberOfEvent();
-  // if (nofEvents == 0) return;
+//  if (nofEvents == 0) return;
     
     
   // Merge accumulables 
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Merge();
-  
-  
+
+
   //G4double edep1  = fEdep1.GetValue();
   // G4double edep2  = fEdep2.GetValue();
   // G4double edep3  = fEdep3.GetValue();
@@ -90,12 +99,10 @@ void B1RunAction::EndOfRunAction(const G4Run*)
   // Run conditions
   //  note: There is no primary generator action object for "master"
   //        run manager for multi-threaded mode.
-
   const B1PrimaryGeneratorAction* generatorAction
    = static_cast<const B1PrimaryGeneratorAction*>
      (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
-
-   
+  
     G4String runCondition;
   if (generatorAction)
   {
@@ -125,29 +132,39 @@ void B1RunAction::EndOfRunAction(const G4Run*)
     //<< "\n mean Energy in S2: " << G4BestUnit(edep2,"Energy")
     //<< " +- "                          << G4BestUnit(rmsedep2,"Energy")
     //<< G4endl;
-  G4cout << "Number of photon in detector 1   Sci:" << GetCounter()->GetS1() << "  Cher:" << GetCounter()->GetC1() << G4endl;
-  G4cout << "Number of photon in detector 2   Sci:" << GetCounter()->GetS2() << "  Cher:" << GetCounter()->GetC2() << G4endl;
-  
-  G4cout << "//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......" << G4endl;
-  G4cout << "//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......" << G4endl;
-  
-  G4cout
-    << G4endl
-    << "--------------------End of Global Run-----------------------"<< G4endl;
- 
-  
-  
-  
-  fHistoManager->PrintStatistic();
-  fHistoManager->Save();
-  
+    
+    
+    G4cout << "//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......" << G4endl;
+    G4cout << "//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......" << G4endl;
+
+    G4cout
+      << G4endl
+      << "--------------------End of Global Run-----------------------"<< G4endl;
+    G4cout << "cristal up:" << Conteggi->GetCountU() << G4endl;
+    G4cout << "cristal down:" << Conteggi->GetCountD() << G4endl;
+    G4cout << "cristal cher:" << Conteggi->GetCountC() << G4endl;
+    G4cout << "coincidence:" << Conteggi->GetCoincidence() << G4endl;
+    G4cout << "triple:" << Conteggi->GetTriple() << G4endl;
+    G4cout << "efficence 2:  " << Conteggi->GetEff() << G4endl ;
+    G4cout << "efficence 3:  " << Conteggi->GetNoGoodEvents() << G4endl ;
+    
+    
+    
+    fHistoManager->PrintStatistic();
+    fHistoManager->Save();
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
+void B1RunAction::AddEdep1(G4double edep)
+{
+  fEdep1  += edep;
+}
+void B1RunAction::AddEdep2(G4double edep)
+{
+  fEdep2  += edep;
+}
 void B1RunAction::AddEdep3(G4double edep)
 {
   fEdep3  += edep;

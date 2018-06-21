@@ -98,56 +98,38 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
 //
   //lunghezza d'onda dei gamma emessi
   G4double photonEnergy[] =
-            { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
-              2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
-              2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
-              2.532*eV, 2.585*eV, 2.640*eV, 2.697*eV,
-              2.757*eV, 2.820*eV, 2.885*eV, 2.954*eV,
-              3.026*eV, 3.102*eV, 3.181*eV, 3.265*eV,
-              3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
-              3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
+            { 3.099*eV, 2.917*eV, 2.755*eV, 2.610*eV,
+              2.479*eV, 2.361*eV, 2.254*eV, 2.156*eV,
+	      2.066*eV, 1.983*eV};
   //
   const G4int nEntries = sizeof(photonEnergy)/sizeof(G4double);
 
 //
 //BGO
 //
-
-G4double refractiveIndex1[] =
-            { 2.15, 2.15,  2.15, 2.15,  2.15,
-              2.15, 2.15,  2.15, 2.15,  2.15,
-              2.15, 2.15,  2.15, 2.15,  2.15,
-              2.15, 2.15,  2.15, 2.15,  2.15,
-              2.15, 2.15,  2.15, 2.15,  2.15,             
-              2.15, 2.15,  2.15, 2.15,  2.15,
-              2.15, 2.15};
-
+  
+  G4double refractiveIndex1[] =
+    { 2.15, 2.15,  2.15, 2.15,  2.15,
+      2.15, 2.15,  2.15, 2.15,  2.15,
+    };
   assert(sizeof(refractiveIndex1) == sizeof(photonEnergy));
-
-G4double absorption[] =
-           {10.*m,  10.*m,  10.*m,  10.*m, 10.*m, 10.*m,
-           10.*m, 10.*m, 10.*m, 10.*m, 10.*m, 10.*m,
-           10.*m, 10.*m, 10.*m, 10.*m, 10.*m, 10.*m,
-           10.*m, 10.*m, 10.*m, 10.*m, 10.*m, 10.*m,
-           10.*m, 10.*m, 10.*m, 10.*m, 10.*m, 10.*m,
-           10.*m, 10.*m };
-
-//corrispondenti alla lambda
-G4double scintilFast[] =
-            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00 };
+  
+  G4double absorption[] =
+    {10.*m,  10.*m,  10.*m,  10.*m, 10.*m, 10.*m,
+     10.*m, 10.*m, 10.*m, 10*m };
+  //corrispondenti alla lambda
+  G4double scintilFast[] =
+    {0.16, 0.53, 0.84, 0.99,
+     0.95, 0.79, 0.67, 0.42,
+     0.27, 0.16};
+  
 
   assert(sizeof(scintilFast) == sizeof(photonEnergy));
 
   G4double scintilSlow[] =
             { .00, .00, .00, .00, .00, .00, .00,
-              .00, .00, .00, .00, .00, .00, .00,
-              .00, .00, .00, .00, .00, .00, .00,
-              .00, .00, .00, .00, .00, .00, .00,
-              .00, .00, .00, .00 };
+              .00, .00, .00
+	    };
 
   assert(sizeof(scintilSlow) == sizeof(photonEnergy));
 
@@ -165,7 +147,7 @@ G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
  myMPT1->AddProperty("SLOWCOMPONENT",photonEnergy, scintilSlow,     nEntries)
    ->SetSpline(true);
  
- myMPT1->AddConstProperty("SCINTILLATIONYIELD",9./keV);
+ myMPT1->AddConstProperty("SCINTILLATIONYIELD",8./keV);
  myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
  myMPT1->AddConstProperty("FASTTIMECONSTANT", 300.*ns);
  myMPT1->AddConstProperty("SLOWTIMECONSTANT",0*ns);
@@ -185,11 +167,9 @@ G4cout << "BGO G4MaterialPropertiesTable" << G4endl;
 //
   G4double refractiveIndex2[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00 };
-
+              1.00, 1.00, 1.00
+	    };
+  
   G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
   myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2, nEntries);
 
@@ -198,8 +178,23 @@ G4cout << "BGO G4MaterialPropertiesTable" << G4endl;
   G4cout << "Air G4MaterialPropertiesTable" << G4endl;
   myMPT2->DumpTable();
 
-  
+  //
+  //Define Glass
+  //
 
+  G4Element* C = nist->FindOrBuildElement(6);
+  G4Element* H = nist->FindOrBuildElement(1);
+  
+  G4Material* Glass = new G4Material("Glass", density=1.032*g/cm3,2);
+  Glass->AddElement(C,91.533*perCent);
+  Glass->AddElement(H,8.467*perCent);
+
+  G4double Glass_RIND[nEntries]={1.49,1.49,1.49,1.49,1.49,1.49,1.49,1.49,1.49,1.49};
+  G4double Glass_AbsLength[nEntries]={420.*cm,420.*cm,420.*cm,420.*cm,420.*cm,420.*cm,420.*cm,420.*cm,420.*cm,420.*cm};
+  G4MaterialPropertiesTable *Glass_mt = new G4MaterialPropertiesTable();
+  Glass_mt->AddProperty("ABSLENGTH",photonEnergy,Glass_AbsLength,nEntries);
+  Glass_mt->AddProperty("RINDEX",photonEnergy,Glass_RIND,nEntries);
+  Glass->SetMaterialPropertiesTable(Glass_mt);
 
   //
   //Define world
@@ -269,17 +264,17 @@ G4cout << "BGO G4MaterialPropertiesTable" << G4endl;
 //
 
   G4OpticalSurface* opCristSurface = new G4OpticalSurface("CristSurface");
-   opCristSurface->SetType(dielectric_LUTDAVIS);
-  opCristSurface->SetFinish(Rough_LUT);
-  opCristSurface->SetModel(DAVIS);
+  opCristSurface->SetType(dielectric_LUT);
+  opCristSurface->SetFinish(polishedtyvekair);
+  opCristSurface->SetModel(LUT);
 
   G4LogicalBorderSurface* logicCristSurface = new G4LogicalBorderSurface("CristSurface",physCrist,physWorld,opCristSurface);
 
 G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
-        (logicCristSurface->GetSurface(physCrist,physWorld)->
-                                                       GetSurfaceProperty());
+  (logicCristSurface->GetSurface(physCrist,physWorld)->
+   GetSurfaceProperty());
  if (opticalSurface) opticalSurface->DumpInfo();
-
+ 
 
 
 //
@@ -287,26 +282,29 @@ G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
 //
  opticalSurface->SetFinish(polished);
  
-  const G4int num = 2;
-  G4double ephoton[num] = {2.034*eV, 4.136*eV};
+  const G4int num = 10;
+  G4double ephoton[num] =
+    { 3.099*eV, 2.917*eV, 2.755*eV, 2.610*eV,
+      2.479*eV, 2.361*eV, 2.254*eV, 2.156*eV,
+      2.066*eV, 1.983*eV};
+  
 
   //OpticalWaterSurface
-  G4double refractiveIndex[num] = {2.15, 2.20};
-  G4double specularLobe[num]    = {1.0, 1.0};
-  G4double specularSpike[num]   = {0.0, 0.0};
-  G4double backScatter[num]     = {0.0, 0.0};
-  G4double efficency[num]       = {0.7, 0.7};
-  G4double reflectivity[num]    = {0.3, 0.3};
-
+  G4double specularLobe[num]    = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+  G4double specularSpike[num]   = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  G4double backScatter[num]     = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  G4double efficency[num]       = {0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7};
+  G4double reflectivity[num]    = {0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+  
   
   G4MaterialPropertiesTable* myST1 = new G4MaterialPropertiesTable();
-
-  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
+  
+  //  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
   myST1->AddProperty("SPECULARLOBECONSTANT",  ephoton, specularLobe,    num);
   myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
   myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
-  myST1->AddProperty("EFFICENCY",             ephoton, efficency,     num);
-  myST1->AddProperty("REFLECTIVITY",          ephoton, reflectivity,     num);
+  myST1->AddProperty("EFFICENCY",             ephoton, efficency,       num);
+  myST1->AddProperty("REFLECTIVITY",          ephoton, reflectivity,    num);
 
   G4cout << "BGO Surface G4MaterialPropertiesTable" << G4endl;
   myST1->DumpTable();
@@ -342,7 +340,7 @@ G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
    
   G4LogicalVolume* logicGammaDet1 =
     new G4LogicalVolume(GammaDet1,          //its solid
-			air,            //its material
+			Glass,            //its material
                         "GammaDet1LV");        //its name
   
   G4PVPlacement* physGammaDet1= new G4PVPlacement(
@@ -358,7 +356,7 @@ G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
   
   G4LogicalVolume* logicGammaDet2 =
     new G4LogicalVolume(GammaDet2,          //its solid
-			air,            //its material
+			Glass,            //its material
 			"GammaDet2LV");        //its name
   
   G4PVPlacement* physGammaDet2= new G4PVPlacement(
