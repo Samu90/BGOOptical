@@ -89,18 +89,18 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   
   G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
   
-  if (volume == fScoringVolume3 &&  ParticleName=="opticalphoton")
+  /*  if (volume == fScoringVolume3 &&  ParticleName=="opticalphoton")
     {
-      if(volume2= fScoringVolume1)
+      if(volume2== fScoringVolume1)
 	{
 	  fEventAction->IncrementPhotonInDetector(0);
 	}
-      else if(volume2= fScoringVolume2)      
+      else if(volume2== fScoringVolume2)      
 	{
 	  fEventAction->IncrementPhotonInDetector(1);
 	}
     }
-  
+  */
   
   
   if (ParticleName != "opticalphoton"){ // if the particle is an optical photon return, else
