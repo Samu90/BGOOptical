@@ -1,0 +1,10 @@
+
+/run/initialize
+#
+/control/verbose 0
+/run/verbose 0
+
+/gun/particle mu-
+/gun/energy 2 GeV
+
+/run/beamOn 1
