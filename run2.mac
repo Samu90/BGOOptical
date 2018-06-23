@@ -4,7 +4,7 @@
 /control/verbose 2
 /run/verbose 2
 
-/gun/particle mu+
-/gun/energy 3 GeV
+/gun/particle mu-
+/gun/energy 2 GeV
 
-/run/beamOn 500000
+/run/beamOn 1
