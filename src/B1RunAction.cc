@@ -19,7 +19,9 @@
 B1RunAction::B1RunAction(HistoManager* histo)
   : G4UserRunAction(),
     fHistoManager(histo),
-    fEdep3(0)
+    fEdep1(0),
+    fEdep2(0),
+     fEdep3(0)
 { 
     
   // Register accumulable to the accumulable manager
@@ -52,10 +54,12 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
   fHistoManager -> Book();
 }
 
-void B1RunAction::FillPerEvent(G4double Edep3)
+void B1RunAction::FillPerEvent(G4double Edep1,G4double Edep2,G4double Edep3)
 {
   //accumulate statistic
   //
+  fEdep1 += Edep1;
+  fEdep2 += Edep2;
   fEdep3 += Edep3;    //fSum2EGap += EGap*EGap;
   
   
@@ -125,6 +129,7 @@ void B1RunAction::EndOfRunAction(const G4Run*)
     //<< "\n mean Energy in S2: " << G4BestUnit(edep2,"Energy")
     //<< " +- "                          << G4BestUnit(rmsedep2,"Energy")
     //<< G4endl;
+
   G4cout << "Number of photon in detector 1   Sci:" << GetCounter()->GetS1() << "  Cher:" << GetCounter()->GetC1() << G4endl;
   G4cout << "Number of photon in detector 2   Sci:" << GetCounter()->GetS2() << "  Cher:" << GetCounter()->GetC2() << G4endl;
   
@@ -148,6 +153,14 @@ void B1RunAction::EndOfRunAction(const G4Run*)
 
 
 
+void B1RunAction::AddEdep1(G4double edep)
+{
+  fEdep1  += edep;
+}
+void B1RunAction::AddEdep2(G4double edep)
+{
+  fEdep2  += edep;
+}
 void B1RunAction::AddEdep3(G4double edep)
 {
   fEdep3  += edep;

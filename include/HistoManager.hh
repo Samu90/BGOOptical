@@ -12,21 +12,21 @@
 class HistoManager
 {
   public:
-    HistoManager();
-   ~HistoManager();
-
-    void Book();
-    void Save();
-    
-    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-  void FillNtuple(G4double edep3);
-    
-    void PrintStatistic();        
-    
-  private:
-    G4bool fFactoryOn;    
+  HistoManager();
+  ~HistoManager();
+  
+  void Book();
+  void Save();
+  
+  void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+  void Normalize(G4int id, G4double fac);    
+  
+  void FillNtuple(G4double edep1,G4double edep2,G4double edep3);
+  
+  void PrintStatistic();        
+  
+private:
+  G4bool fFactoryOn;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

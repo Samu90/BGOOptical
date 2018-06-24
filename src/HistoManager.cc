@@ -45,6 +45,10 @@ void HistoManager::Book()
   // analysisManager->SetFirstHistoId(1);  
   
   // id = 0
+  analysisManager->CreateH1("Edep1","Edep in D1", 100, 0., 40*MeV);
+  // id = 1
+  analysisManager->CreateH1("Edep2","Edep in D2", 100, 0., 40*MeV);
+  // id = 2
   analysisManager->CreateH1("Edep3","Edep in C", 100, 0., 40*MeV);
 
   // Create ntuples.
@@ -53,8 +57,11 @@ void HistoManager::Book()
   // analysisManager->SetFirstMtupleId(1);  
   
   // Create 1st ntuple (id = 0)
+  
   analysisManager->CreateNtuple("Ntuple1", "Edep");
-   analysisManager->CreateNtupleDColumn("Edep3"); // column Id = 0
+  analysisManager->CreateNtupleDColumn("Edep1"); // column Id = 0
+  analysisManager->CreateNtupleDColumn("Edep2"); // column Id = 1
+  analysisManager->CreateNtupleDColumn("Edep3"); // column Id = 2
   analysisManager->FinishNtuple();
   
   fFactoryOn = true;       
@@ -99,10 +106,12 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::FillNtuple(G4double energyAbs3)
+void HistoManager::FillNtuple(G4double energyAbs1,G4double energyAbs2,G4double energyAbs3)
 {                
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   // Fill 1st ntuple ( id = 0)
+  analysisManager->FillNtupleDColumn(0, energyAbs1);
+  analysisManager->FillNtupleDColumn(1, energyAbs2);
   analysisManager->FillNtupleDColumn(2, energyAbs3);
   analysisManager->AddNtupleRow(0);  
 }

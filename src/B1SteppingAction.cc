@@ -54,23 +54,19 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
     ->GetVolume()->GetLogicalVolume();
-
+  
   // get volume of the current step
-  G4LogicalVolume* volume2 
-    = step->GetPostStepPoint()->GetTouchableHandle()
-    ->GetVolume()->GetLogicalVolume();
 
+  /*G4LogicalVolume* volume2 
+    = step->GetPostStepPoint()->GetTouchableHandle()
+    ->GetVolume()->GetLogicalVolume();*/
   
   // check if we are in scoring volume
   //  if (volume != fScoringVolume3 && volume != fScoringVolume2 && volume != fScoringVolume1) return;
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
 
-  
-  
-  if(volume==fScoringVolume3){
-    fEventAction->AddEdep3(edepStep);
-  }
+  fEventAction->AddEdep3(edepStep);
 
   
   //int ParticleID = aTrack->GetParentID();
@@ -106,7 +102,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   if (ParticleName != "opticalphoton"){ // if the particle is an optical photon return, else
     //if the particle is not an optical photon (muon for example) generate secondaries particles
     
-     const std::vector<const G4Track*>* secondaries=step->GetSecondaryInCurrentStep();
+    const std::vector<const G4Track*>* secondaries=step->GetSecondaryInCurrentStep();
     
     
     if (secondaries->size()>0) {
@@ -126,16 +122,21 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   if(ParticleName == "opticalphoton"){
 
     if(volume == fScoringVolume1){
+      G4double phEnergy=step->GetTrack()->GetTotalEnergy();
       G4cout << "fotone sull'1" << G4endl;
-      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation")fRunAction->GetCounter()->IncreaseS1();
-      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov")fRunAction->GetCounter()->IncreaseC1();
+      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation"){fRunAction->GetCounter()->IncreaseS1();
+	fEventAction->AddEdep1(phEnergy);}
+      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov"){fRunAction->GetCounter()->IncreaseC1();
+	fEventAction->AddEdep1(phEnergy);}
       track->SetTrackStatus(fStopAndKill);
     }
 
     if(volume == fScoringVolume2){
+      G4double phEnergy=step->GetTrack()->GetTotalEnergy();
       G4cout << "fotone sul 2" << G4endl;
-      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation")fRunAction->GetCounter()->IncreaseS2();
-      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov")fRunAction->GetCounter()->IncreaseC2();
+      if(track->GetCreatorProcess()->GetProcessName()=="Scintillation"){fRunAction->GetCounter()->IncreaseS2();}
+      if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov"){fRunAction->GetCounter()->IncreaseC2();
+	fEventAction->AddEdep1(phEnergy);}
       track->SetTrackStatus(fStopAndKill);
     }
     
