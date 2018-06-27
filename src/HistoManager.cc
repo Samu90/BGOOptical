@@ -134,8 +134,8 @@ void HistoManager::PrintStatistic()
     if (name[0U] == 'E' ) unitCategory = "Energy"; 
 
     G4cout << name
-           << ": mean = " << G4BestUnit(h1->mean(), unitCategory) 
-           << " rms = " << G4BestUnit(h1->rms(), unitCategory ) 
+           << ": mean = " << h1->mean()<< " MeV"                      //G4BestUnit(h1->mean(), unitCategory) 
+           << " rms = " << h1->rms() << " MeV"                            // G4BestUnit(h1->rms(), unitCategory ) 
            << G4endl;
   }
 }

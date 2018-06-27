@@ -21,12 +21,14 @@ B1RunAction::B1RunAction(HistoManager* histo)
     fHistoManager(histo),
     fEdep1(0),
     fEdep2(0),
-     fEdep3(0)
+    fEdep3(0)
 { 
     
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-    accumulableManager->RegisterAccumulable(fEdep3);
+  accumulableManager->RegisterAccumulable(fEdep1);
+  accumulableManager->RegisterAccumulable(fEdep2);
+  accumulableManager->RegisterAccumulable(fEdep3);
 
   Conteggi = new MyCounter();
     

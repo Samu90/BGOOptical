@@ -14,9 +14,9 @@ B1EventAction::B1EventAction(B1RunAction* runAction, HistoManager* histo)
 : G4UserEventAction(),
   fRunAction(runAction),
   fHistoManager(histo),
-  fEdep1(0.),
-  fEdep2(0.),
-  fEdep3(0.),
+  fEdep1(),
+  fEdep2(),
+  fEdep3(),
   fPrintModulo(0)
 {
   fPrintModulo=100;
@@ -53,8 +53,9 @@ void B1EventAction::EndOfEventAction(const G4Event*)
   
   //fill histograms
   //
-  
+  //G4cout << "fedep1: "<< fEdep1*1000000<< G4endl; 
   fHistoManager->FillHisto(0, fEdep1);
+  //G4cout << "fedep2: "<< fEdep2*1000000<< G4endl; 
   fHistoManager->FillHisto(1, fEdep2);
   fHistoManager->FillHisto(2, fEdep3);
   
@@ -71,8 +72,13 @@ void B1EventAction::EndOfEventAction(const G4Event*)
 
     for(size_t i=0;i<fNPhotonInDetector.size();i++)
       {
-	G4cout<<"N opt phot in detector "<<i<<" "<<fNPhotonInDetector[i]<<G4endl;									  
+	G4cout<<"N opt phot in detector "<<i+1<<" "<<fNPhotonInDetector[i]<<G4endl;									  
       }
+
+
+
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,7 +86,7 @@ void B1EventAction::IncrementPhotonInDetector(const size_t detectorID)
 {
   if(detectorID>fNPhotonInDetector.size())
     {
-      G4cout<<"ERROR B1EventAction::IncrementPhotonInDetector size"<<G4endl;
+      //G4cout<<"ERROR B1EventAction::IncrementPhotonInDetector size"<<G4endl;
 	return;
     }
   fNPhotonInDetector[detectorID]++;

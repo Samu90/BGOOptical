@@ -85,18 +85,16 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   
   G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
   
-  /*  if (volume == fScoringVolume3 &&  ParticleName=="opticalphoton")
-    {
-      if(volume2== fScoringVolume1)
-	{
-	  fEventAction->IncrementPhotonInDetector(0);
-	}
-      else if(volume2== fScoringVolume2)      
-	{
-	  fEventAction->IncrementPhotonInDetector(1);
-	}
+    if (volume == fScoringVolume1 &&  ParticleName=="opticalphoton")
+    {	
+      fEventAction->IncrementPhotonInDetector(0);
     }
-  */
+    else if(volume== fScoringVolume2 &&  ParticleName=="opticalphoton")      
+      {
+	fEventAction->IncrementPhotonInDetector(1);
+      }
+
+  
   
   
   if (ParticleName != "opticalphoton"){ // if the particle is an optical photon return, else
@@ -123,7 +121,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
     if(volume == fScoringVolume1){
       G4double phEnergy=step->GetTrack()->GetTotalEnergy();
-      G4cout << "fotone sull'1" << G4endl;
+      //      G4cout << "fotone sull'1" << G4endl;
       if(track->GetCreatorProcess()->GetProcessName()=="Scintillation"){fRunAction->GetCounter()->IncreaseS1();
 	fEventAction->AddEdep1(phEnergy);}
       if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov"){fRunAction->GetCounter()->IncreaseC1();
@@ -133,9 +131,10 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
     if(volume == fScoringVolume2){
       G4double phEnergy=step->GetTrack()->GetTotalEnergy();
-      G4cout << "fotone sul 2" << G4endl;
+      //G4cout << "fotone sul 2" << G4endl;
       if(track->GetCreatorProcess()->GetProcessName()=="Scintillation"){fRunAction->GetCounter()->IncreaseS2();}
       if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov"){fRunAction->GetCounter()->IncreaseC2();
+	G4cout<< "energia fotone  : " <<phEnergy<<G4endl;
 	fEventAction->AddEdep2(phEnergy);}
       track->SetTrackStatus(fStopAndKill);
     }
