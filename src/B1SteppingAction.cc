@@ -136,7 +136,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
       G4cout << "fotone sul 2" << G4endl;
       if(track->GetCreatorProcess()->GetProcessName()=="Scintillation"){fRunAction->GetCounter()->IncreaseS2();}
       if(track->GetCreatorProcess()->GetProcessName()=="Cerenkov"){fRunAction->GetCounter()->IncreaseC2();
-	fEventAction->AddEdep1(phEnergy);}
+	fEventAction->AddEdep2(phEnergy);}
       track->SetTrackStatus(fStopAndKill);
     }
     

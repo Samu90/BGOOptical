@@ -58,13 +58,13 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4double theta=pCos();
     G4double phi=G4UniformRand()*2*3.141;
     G4double pz=-1;
-    G4double px=0.7;
+    G4double px=0;
     G4double py=0;
  
 
     G4double x0=0;
     G4double y0=0;
-    G4double z0=2*cm;
+    G4double z0=1*cm;
     
         
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(px,py,pz));

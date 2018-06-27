@@ -45,9 +45,9 @@ void HistoManager::Book()
   // analysisManager->SetFirstHistoId(1);  
   
   // id = 0
-  analysisManager->CreateH1("Edep1","Edep in D1", 100, 0., 40*MeV);
+  analysisManager->CreateH1("Edep1","Edep in D1", 100, 0., 10*keV);
   // id = 1
-  analysisManager->CreateH1("Edep2","Edep in D2", 100, 0., 40*MeV);
+  analysisManager->CreateH1("Edep2","Edep in D2", 100, 0., 10*eV);
   // id = 2
   analysisManager->CreateH1("Edep3","Edep in C", 100, 0., 40*MeV);
 
