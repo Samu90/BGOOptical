@@ -271,8 +271,7 @@ G4cout << "BGO G4MaterialPropertiesTable" << G4endl;
   G4LogicalBorderSurface* logicCristSurface = new G4LogicalBorderSurface("CristSurface",physCrist,physWorld,opCristSurface);
 
 G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
-  (logicCristSurface->GetSurface(physCrist,physWorld)->
-   GetSurfaceProperty());
+  (logicCristSurface->GetSurface(physCrist,physWorld)->GetSurfaceProperty());
  if (opticalSurface) opticalSurface->DumpInfo();
  
 

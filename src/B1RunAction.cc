@@ -19,9 +19,9 @@
 B1RunAction::B1RunAction(HistoManager* histo)
   : G4UserRunAction(),
     fHistoManager(histo),
-    fEdep1(0),
-    fEdep2(0),
-    fEdep3(0)
+    fEdep1(0.),
+    fEdep2(0.),
+    fEdep3(0.)
 { 
     
   // Register accumulable to the accumulable manager

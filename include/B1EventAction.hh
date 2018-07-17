@@ -1,4 +1,3 @@
-
 #ifndef B1EventAction_h
 #define B1EventAction_h 1
 

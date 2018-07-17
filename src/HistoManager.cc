@@ -23,7 +23,7 @@ void HistoManager::Book()
 
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetVerboseLevel(0);
   analysisManager->SetNtupleMerging(true);
       
   // Create directories 
@@ -45,9 +45,9 @@ void HistoManager::Book()
   // analysisManager->SetFirstHistoId(1);  
   
   // id = 0
-  analysisManager->CreateH1("Edep1","Edep in D1", 100, 0., 10*keV);
+  analysisManager->CreateH1("Edep1","Edep in D1", 100, 0., 10e-3*MeV);
   // id = 1
-  analysisManager->CreateH1("Edep2","Edep in D2", 100, 0., 10*eV);
+  analysisManager->CreateH1("Edep2","Edep in D2", 100, 0., 100e-6*MeV);
   // id = 2
   analysisManager->CreateH1("Edep3","Edep in C", 100, 0., 40*MeV);
 
@@ -134,8 +134,8 @@ void HistoManager::PrintStatistic()
     if (name[0U] == 'E' ) unitCategory = "Energy"; 
 
     G4cout << name
-           << ": mean = " << h1->mean()<< " MeV"                      //G4BestUnit(h1->mean(), unitCategory) 
-           << " rms = " << h1->rms() << " MeV"                            // G4BestUnit(h1->rms(), unitCategory ) 
+           << ": mean = " /*<< h1->mean() << " MeV"*/                      << G4BestUnit(h1->mean(), unitCategory) 
+           << " rms = " /*<< h1->rms() << " MeV"*/                         << G4BestUnit(h1->rms(), unitCategory) 
            << G4endl;
   }
 }

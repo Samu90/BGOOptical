@@ -57,14 +57,16 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //    Direzione Momento casuale!!
     G4double theta=pCos();
     G4double phi=G4UniformRand()*2*3.141;
-    G4double pz=-1;
-    G4double px=0;
+    G4double thgrd=-10;
+    G4double thrad=3.14159*thgrd/180;
+    G4double pz=-cos(thrad);
+    G4double px=sin(thrad);
     G4double py=0;
  
 
     G4double x0=0;
     G4double y0=0;
-    G4double z0=1*cm;
+    G4double z0=1.5*cm;
     
         
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(px,py,pz));
